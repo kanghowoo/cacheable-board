@@ -6,14 +6,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class BoardServiceImpl implements BoardService {
 
-    private final BoardRepositoryImpl boardRepositoryImpl;
+    private final BoardRepository boardRepository;
 
     @Autowired
-    public BoardServiceImpl(BoardRepositoryImpl boardRepositoryImpl) {this.boardRepositoryImpl =
-            boardRepositoryImpl;}
+    public BoardServiceImpl(BoardRepository boardRepository) {this.boardRepository =
+            boardRepository;}
 
     public void write() {
-        boardRepositoryImpl.write();
+        boardRepository.write();
     }
 
 }
