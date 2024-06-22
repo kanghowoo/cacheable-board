@@ -1,5 +1,5 @@
 package com.mide.gangsaeng.board;
 
 public interface BoardService {
-    void write();
+    void write(BoardRequest request);
 }
