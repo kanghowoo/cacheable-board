@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/board")
 public class BoardController {
 
-    private final BoardServiceImpl boardServiceImpl;
+    private final BoardService boardService;
 
     @Autowired
-    public BoardController(BoardServiceImpl boardServiceImpl) {this.boardServiceImpl = boardServiceImpl;}
+    public BoardController(BoardService boardService) {this.boardService = boardService;}
 
     @PostMapping
     public ResponseEntity<String> write() {
-        boardServiceImpl.write();
+        boardService.write();
         return ResponseEntity.ok("ok");
     }
 }
