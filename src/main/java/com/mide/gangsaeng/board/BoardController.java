@@ -20,9 +20,9 @@ public class BoardController {
     public BoardController(BoardService boardService) {this.boardService = boardService;}
 
     @PostMapping
-    public ResponseEntity<String> write(@RequestBody BoardRequest request) {
+    public ResponseEntity<?> write(@RequestBody BoardRequest request) {
         boardService.write(request);
-        return ResponseEntity.ok("ok");
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
