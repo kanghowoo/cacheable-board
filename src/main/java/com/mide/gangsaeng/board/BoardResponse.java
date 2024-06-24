@@ -8,9 +8,11 @@ import lombok.Getter;
 @Getter
 @Builder
 public class BoardResponse {
+    private Long id;
     private String title;
     private String content;
     private int userId;
+    private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
 }
