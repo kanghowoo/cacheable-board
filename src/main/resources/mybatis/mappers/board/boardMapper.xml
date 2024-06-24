@@ -5,4 +5,10 @@
   <insert id="write" parameterType="com.mide.gangsaeng.board.BoardRequest">
     INSERT INTO boards (title, content, user_id) values (#{title}, #{content}, #{user_id});
   </insert>
+
+  <select id="read" parameterType="Long" resultType="com.mide.gangsaeng.board.Board">
+    SELECT *
+    FROM boards
+    WHERE id = #{id};
+  </select>
 </mapper>

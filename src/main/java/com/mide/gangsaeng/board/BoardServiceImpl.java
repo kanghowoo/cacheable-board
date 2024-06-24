@@ -16,4 +16,15 @@ public class BoardServiceImpl implements BoardService {
         boardRepository.write(request);
     }
 
+    @Override
+    public BoardResponse read(Long id) {
+        Board board = boardRepository.read(id);
+        return BoardResponse.builder()
+                .title(board.getTitle())
+                .content(board.getContent())
+                .userId(board.getUserId())
+                .updatedAt(board.getUpdatedAt())
+                .build();
+    }
+
 }
