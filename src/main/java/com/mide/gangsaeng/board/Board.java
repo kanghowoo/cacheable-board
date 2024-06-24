@@ -1,5 +1,7 @@
 package com.mide.gangsaeng.board;
 
+import java.time.LocalDateTime;
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,4 +12,7 @@ public class Board {
     private final String title;
     private final String content;
     private final int userId;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime updatedAt;
+
 }
