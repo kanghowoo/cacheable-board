@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/boards")
 public class BoardController {
@@ -20,7 +22,7 @@ public class BoardController {
     public BoardController(BoardService boardService) {this.boardService = boardService;}
 
     @PostMapping
-    public ResponseEntity<?> write(@RequestBody BoardRequest request) {
+    public ResponseEntity<?> write(@Valid @RequestBody BoardRequest request) {
         boardService.write(request);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
