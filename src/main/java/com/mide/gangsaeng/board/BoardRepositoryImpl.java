@@ -4,7 +4,12 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class BoardRepositoryImpl implements BoardRepository {
-    public void write() {
 
+    private final BoardMapper mapper;
+
+    public BoardRepositoryImpl(BoardMapper mapper) {this.mapper = mapper;}
+
+    public void write(BoardRequest request) {
+        mapper.write(request);
     }
 }

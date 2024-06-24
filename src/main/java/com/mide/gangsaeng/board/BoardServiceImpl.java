@@ -12,8 +12,8 @@ public class BoardServiceImpl implements BoardService {
     public BoardServiceImpl(BoardRepository boardRepository) {this.boardRepository =
             boardRepository;}
 
-    public void write() {
-        boardRepository.write();
+    public void write(BoardRequest request) {
+        boardRepository.write(request);
     }
 
 }
