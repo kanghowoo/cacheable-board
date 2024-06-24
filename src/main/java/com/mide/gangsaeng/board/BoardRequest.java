@@ -8,5 +8,5 @@ import lombok.Getter;
 public class BoardRequest {
     private String title;
     private String content;
-    private int user_id;
+    private int userId;
 }
