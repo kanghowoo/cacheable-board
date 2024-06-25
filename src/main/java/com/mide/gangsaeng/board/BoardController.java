@@ -19,7 +19,7 @@ import jakarta.validation.Valid;
 @RequestMapping("/boards")
 public class BoardController {
 
-    public static final String DEFAULT_PAGE = "0";
+    public static final String DEFAULT_PAGE = "1";
     public static final String DEFAULT_PAGE_SIZE = "10";
     private final BoardService boardService;
 
@@ -41,7 +41,7 @@ public class BoardController {
     @GetMapping
     public ResponseEntity<?> list(@RequestParam(defaultValue = DEFAULT_PAGE) int page,
                                   @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) int size) {
-        int offset = page * size;
+        int offset = (page - 1) * size;
         List<Board> boardList = boardService.getPage(offset, size);
 
         return new ResponseEntity<>(boardList, HttpStatus.OK);

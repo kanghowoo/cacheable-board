@@ -15,6 +15,6 @@
   <select id="getPage" parameterType="HashMap" resultType="com.mide.gangsaeng.board.Board">
     SELECT *
     FROM boards
-    LIMIT #{size} OFFSET #{offset};
+    ORDER BY id DESC LIMIT #{size} OFFSET #{offset};
   </select>
 </mapper>
