@@ -12,4 +12,9 @@ public class BoardRepositoryImpl implements BoardRepository {
     public void write(BoardRequest request) {
         mapper.write(request);
     }
+
+    @Override
+    public Board read(long id) {
+        return mapper.read(id);
+    }
 }
