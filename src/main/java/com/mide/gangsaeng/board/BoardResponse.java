@@ -8,11 +8,11 @@ import lombok.Getter;
 @Getter
 @Builder
 public class BoardResponse {
-    private Long id;
-    private String title;
-    private String content;
-    private int userId;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private final long id;
+    private final String title;
+    private final String content;
+    private final long userId;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime updatedAt;
 
 }

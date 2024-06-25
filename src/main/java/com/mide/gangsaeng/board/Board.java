@@ -8,10 +8,10 @@ import lombok.Getter;
 @Getter
 @Builder
 public class Board {
-    private final int id;
+    private final long id;
     private final String title;
     private final String content;
-    private final int userId;
+    private final long userId;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
