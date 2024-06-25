@@ -1,5 +1,7 @@
 package com.mide.gangsaeng.board;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
@@ -16,6 +19,8 @@ import jakarta.validation.Valid;
 @RequestMapping("/boards")
 public class BoardController {
 
+    public static final String DEFAULT_PAGE = "1";
+    public static final String DEFAULT_PAGE_SIZE = "10";
     private final BoardService boardService;
 
     @Autowired
@@ -31,5 +36,14 @@ public class BoardController {
     public ResponseEntity<?> read(@PathVariable Long id) {
         BoardResponse boardResponse = boardService.read(id);
         return new ResponseEntity<>(boardResponse, HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<?> list(@RequestParam(defaultValue = DEFAULT_PAGE) int page,
+                                  @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) int size) {
+        int offset = (page - 1) * size;
+        List<Board> boardList = boardService.getPage(offset, size);
+
+        return new ResponseEntity<>(boardList, HttpStatus.OK);
     }
 }
