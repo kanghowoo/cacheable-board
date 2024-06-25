@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class BoardServiceImpl implements BoardService {
 
+    public static final int MAX_VALUE_OF_PAGE_SIZE = 30;
     private final BoardRepository boardRepository;
 
     @Autowired
@@ -33,6 +34,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public List<Board> getPage(int offset, int size) {
+        size = Math.min(size, MAX_VALUE_OF_PAGE_SIZE);
         return boardRepository.getPage(offset, size);
     }
 
