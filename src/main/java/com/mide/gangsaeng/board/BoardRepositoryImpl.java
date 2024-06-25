@@ -14,7 +14,7 @@ public class BoardRepositoryImpl implements BoardRepository {
     }
 
     @Override
-    public Board read(Long id) {
+    public Board read(long id) {
         return mapper.read(id);
     }
 }
