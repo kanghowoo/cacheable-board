@@ -1,5 +1,7 @@
 package com.mide.gangsaeng.board;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,11 @@ public class BoardServiceImpl implements BoardService {
                 .createdAt(board.getCreatedAt())
                 .updatedAt(board.getUpdatedAt())
                 .build();
+    }
+
+    @Override
+    public List<Board> getPage(int offset, int size) {
+        return boardRepository.getPage(offset, size);
     }
 
 }

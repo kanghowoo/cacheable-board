@@ -11,4 +11,10 @@
     FROM boards
     WHERE id = #{id};
   </select>
+
+  <select id="getPage" parameterType="HashMap" resultType="com.mide.gangsaeng.board.Board">
+    SELECT *
+    FROM boards
+    LIMIT #{size} OFFSET #{offset};
+  </select>
 </mapper>
