@@ -17,4 +17,19 @@
     FROM boards
     ORDER BY id DESC LIMIT #{size} OFFSET #{offset};
   </select>
+
+  <select id="getPrevPage" parameterType="HashMap" resultType="com.mide.gangsaeng.board.Board">
+    SELECT *
+    FROM boards
+    WHERE id > #{id}
+    ORDER BY id DESC LIMIT #{size};
+  </select>
+
+  <select id="getNextPage" parameterType="HashMap" resultType="com.mide.gangsaeng.board.Board">
+    SELECT *
+    FROM boards
+    WHERE #{id} > id
+    ORDER BY id DESC LIMIT #{size};
+  </select>
+
 </mapper>
