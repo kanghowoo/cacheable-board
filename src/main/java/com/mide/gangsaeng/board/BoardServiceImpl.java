@@ -1,6 +1,9 @@
 package com.mide.gangsaeng.board;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,6 +49,8 @@ public class BoardServiceImpl implements BoardService {
     public CursorBasedResponse<Board> getPageByCursor(CursorBasedRequest request, int size) {
         if ("prev".equals(request.getDirection())) {
             List<Board> page = boardRepository.getPrevPage(request.getCursor(), size);
+            page.sort((p1, p2) -> Long.compare(p2.getId(), p1.getId()));
+
             Cursor afterCursor = getCursor(page);
 
             return new CursorBasedResponse<>(page, afterCursor);

@@ -22,7 +22,7 @@
     SELECT *
     FROM boards
     WHERE id > #{id}
-    ORDER BY id DESC LIMIT #{size};
+    ORDER BY id LIMIT #{size};
   </select>
 
   <select id="getNextPage" parameterType="HashMap" resultType="com.mide.gangsaeng.board.Board">
