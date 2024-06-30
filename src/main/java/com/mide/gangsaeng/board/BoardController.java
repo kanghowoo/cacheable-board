@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.mide.gangsaeng.common.Cursor;
 import com.mide.gangsaeng.common.CursorBasedRequest;
 import com.mide.gangsaeng.common.CursorBasedResponse;
 

@@ -2,8 +2,6 @@ package com.mide.gangsaeng.board;
 
 import java.util.List;
 
-import com.mide.gangsaeng.common.Cursor;
-
 public interface BoardRepository {
     void write(BoardRequest request);
     Board read(long id);
