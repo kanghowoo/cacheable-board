@@ -7,10 +7,10 @@ import lombok.Setter;
 @Getter
 @Builder
 public class Cursor {
-    private long prevCursor;
-    private long nextCursor;
+    private Long prevCursor;
+    private Long nextCursor;
 
-    public Cursor(long prevCursor, long nextCursor) {
+    public Cursor(Long prevCursor, Long nextCursor) {
         this.prevCursor = prevCursor;
         this.nextCursor = nextCursor;
     }

@@ -43,30 +43,47 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    public CursorBasedResponse<Board> getPageByCursor(CursorBasedRequest request, int size) {
+    public CursorBasedResponse<Board> getPageByCursor(CursorBasedRequest request, int pageSize) {
+
+        int size = pageSize + 1;
+        Long prevCursor = null;
+        Long nextCursor = null;
+
         if ("prev".equals(request.getDirection())) {
             List<Board> page = boardRepository.getPrevPage(request.getCursor(), size);
+
             page.sort((p1, p2) -> Long.compare(p2.getId(), p1.getId()));
 
-            Cursor afterCursor = getCursor(page);
+            if (page.size() == size) {
+                page.remove(0);
+                prevCursor = page.get(0).getId();
+            }
 
-            return new CursorBasedResponse<>(page, afterCursor);
+            if (page.size() < pageSize) {
+                page = boardRepository.getNextPage(Long.MAX_VALUE, pageSize); //root page
+            }
+
+            nextCursor = page.get(page.size() - 1).getId();
+
+            return new CursorBasedResponse<>(page, new Cursor(prevCursor, nextCursor));
         }
 
         List<Board> page = boardRepository.getNextPage(request.getCursor(), size);
-        Cursor afterCursor = getCursor(page);
 
-        return new CursorBasedResponse<>(page, afterCursor);
+        if (page.size() == size) {
+            page.remove(size - 1);
+            nextCursor = page.get(page.size() - 1).getId();
+        }
+
+        if (!isRootCursor(request)) {
+            prevCursor = page.get(0).getId();
+        }
+
+        return new CursorBasedResponse<>(page, new Cursor(prevCursor, nextCursor));
     }
 
-    private Cursor getCursor(List<Board> page) {
-        if (page.isEmpty()) {
-            throw new IllegalArgumentException("prev page is not present");
-        }
-        final long prevCursor = page.get(0).getId();
-        final long nextCursor = page.get(page.size() - 1).getId();
-
-        return new Cursor(prevCursor, nextCursor);
+    private boolean isRootCursor(CursorBasedRequest request) {
+        return request.getCursor() == Long.MAX_VALUE && "next".equals(request.getDirection());
     }
 
 }
