@@ -54,13 +54,22 @@ public class BoardServiceImpl implements BoardService {
 
             page.sort((p1, p2) -> Long.compare(p2.getId(), p1.getId()));
 
+            //이전 페이지에 새로운 데이터가 생길 경우
+            if (page.size() < pageSize) {
+                page = boardRepository.getNextPage(Long.MAX_VALUE, size); //root page;
+
+                //다음 페이지 확인
+                if (page.size() == size) {
+                    page.remove(size - 1);
+                    nextCursor = page.get(page.size() - 1).getId();
+                }
+
+                return new CursorBasedResponse<>(page, new Cursor(prevCursor, nextCursor));
+            }
+
             if (page.size() == size) {
                 page.remove(0);
                 prevCursor = page.get(0).getId();
-            }
-
-            if (page.size() < pageSize) {
-                page = boardRepository.getNextPage(Long.MAX_VALUE, pageSize); //root page
             }
 
             nextCursor = page.get(page.size() - 1).getId();
@@ -74,6 +83,7 @@ public class BoardServiceImpl implements BoardService {
             page.remove(size - 1);
             nextCursor = page.get(page.size() - 1).getId();
         }
+
 
         if (!isRootCursor(request)) {
             prevCursor = page.get(0).getId();
