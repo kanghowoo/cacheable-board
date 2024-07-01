@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+
 @Repository
 public class BoardRepositoryImpl implements BoardRepository {
 
@@ -23,5 +24,15 @@ public class BoardRepositoryImpl implements BoardRepository {
     @Override
     public List<Board> getPage(int offset, int size) {
         return mapper.getPage(offset, size);
+    }
+
+    @Override
+    public List<Board> getPrevPage(long cursor, int size) {
+        return mapper.getPrevPage(cursor, size);
+    }
+
+    @Override
+    public List<Board> getNextPage(long cursor, int size) {
+        return mapper.getNextPage(cursor, size);
     }
 }
