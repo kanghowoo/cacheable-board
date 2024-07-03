@@ -32,7 +32,7 @@ public class BannedWordController {
 
     @GetMapping
     public ResponseEntity<?> list() {
-        BannedWordResponse<BannedWord> response = new BannedWordResponse<>(bannedWordService.list());
+        BannedWordResponse response = new BannedWordResponse(bannedWordService.list());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

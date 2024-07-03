@@ -5,10 +5,10 @@ import java.util.List;
 import lombok.Getter;
 
 @Getter
-public class BannedWordResponse<T> {
-    private final List<T> data;
+public class BannedWordResponse {
+    private final List<BannedWord> data;
 
-    public BannedWordResponse(List<T> words) {
+    public BannedWordResponse(List<BannedWord> words) {
         this.data = words;
     }
 
