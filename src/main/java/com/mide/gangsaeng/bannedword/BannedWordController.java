@@ -2,7 +2,6 @@ package com.mide.gangsaeng.bannedword;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,19 +26,19 @@ public class BannedWordController {
 
     @PostMapping
     public ResponseEntity<?> add(@Valid @RequestBody CreateBannedWordRequest request) {
-        bannedWordService.add(request.getWord());
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        String response = bannedWordService.add(request.getWord());
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping
     public ResponseEntity<?> list() {
         BannedWordResponse<BannedWord> response = new BannedWordResponse<>(bannedWordService.list());
-        return ResponseEntity.ok(response);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping
     public ResponseEntity<?> delete(@RequestParam String word) {
-        bannedWordService.delete(word);
-        return ResponseEntity.ok("deleted success");
+        String response = bannedWordService.delete(word);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
