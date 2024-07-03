@@ -14,11 +14,7 @@ public class BannedWord {
     }
 
     private void validate(String word) {
-        if (word == null) {
-            throw new IllegalArgumentException("null parameter is not allowed in banned word");
-        }
-
-        if (word.isBlank() || word.isEmpty()) {
+        if (word == null || word.isBlank()) {
             throw new IllegalArgumentException("empty string is not allowed in banned word");
         }
     }
