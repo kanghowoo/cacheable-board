@@ -26,8 +26,13 @@ public class BannedWordController {
 
     @PostMapping
     public ResponseEntity<?> add(@Valid @RequestBody CreateBannedWordRequest request) {
-        String response = bannedWordService.add(request.getWord());
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        boolean success = bannedWordService.add(request.getWord());
+
+        if (!success) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -38,7 +43,12 @@ public class BannedWordController {
 
     @DeleteMapping
     public ResponseEntity<?> delete(@RequestParam String word) {
-        String response = bannedWordService.delete(word);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        boolean success = bannedWordService.delete(word);
+
+        if (!success) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
