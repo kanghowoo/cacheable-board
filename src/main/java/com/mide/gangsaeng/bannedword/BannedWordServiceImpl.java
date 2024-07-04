@@ -11,13 +11,10 @@ public class BannedWordServiceImpl implements BannedWordService {
     private static final ConcurrentHashMap<String,BannedWord> cache = new ConcurrentHashMap<>();
 
     @Override
-    public boolean add(String word) {
-        if (isBanned(word)) {
-            return false;
-        }
+    public boolean added(String word) {
+        BannedWord addedWord = cache.putIfAbsent(word, new BannedWord(word));
 
-        cache.put(word, new BannedWord(word));
-        return true;
+        return addedWord != null;
     }
 
     @Override
