@@ -25,10 +25,10 @@ public class BannedWordController {
     }
 
     @PostMapping
-    public ResponseEntity<?> added(@Valid @RequestBody CreateBannedWordRequest request) {
-        boolean success = bannedWordService.added(request.getWord());
+    public ResponseEntity<?> add(@Valid @RequestBody CreateBannedWordRequest request) {
+        boolean added = bannedWordService.add(request.getWord());
 
-        if (!success) {
+        if (!added) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
@@ -42,11 +42,11 @@ public class BannedWordController {
     }
 
     @DeleteMapping
-    public ResponseEntity<?> deleted(@RequestParam String word) {
-        boolean success = bannedWordService.delete(word);
+    public ResponseEntity<?> delete(@RequestParam String word) {
+        boolean deleted = bannedWordService.delete(word);
 
-        if (!success) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        if (!deleted) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         return new ResponseEntity<>(HttpStatus.OK);
