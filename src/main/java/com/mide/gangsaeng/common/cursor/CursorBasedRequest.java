@@ -1,4 +1,4 @@
-package com.mide.gangsaeng.common;
+package com.mide.gangsaeng.common.cursor;
 
 import lombok.Builder;
 import lombok.Getter;
