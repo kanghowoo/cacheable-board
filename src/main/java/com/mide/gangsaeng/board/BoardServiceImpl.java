@@ -25,7 +25,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public void write(BoardRequest request) {
-        bannedWordService.findBannedWords(request.getTitle() + " " +request.getContent());
+        bannedWordService.validateBannedWords(request.getTitle() + " " +request.getContent());
         boardRepository.write(request);
     }
 

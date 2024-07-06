@@ -39,7 +39,7 @@ public class BannedWordServiceImpl implements BannedWordService {
     }
 
     @Override
-    public void findBannedWords(String content) {
+    public void validateBannedWords(String content) {
         String target = content.toLowerCase();
 
         List<BannedWord> wordList = new ArrayList<>();

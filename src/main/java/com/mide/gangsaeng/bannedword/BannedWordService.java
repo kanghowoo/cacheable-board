@@ -7,5 +7,5 @@ public interface BannedWordService {
     boolean delete(String word);
     List<BannedWord> list();
 
-    void findBannedWords(String content);
+    void validateBannedWords(String content);
 }
