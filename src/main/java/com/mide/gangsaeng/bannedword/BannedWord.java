@@ -10,7 +10,11 @@ public class BannedWord {
 
     public BannedWord(String word) {
         validate(word);
-        this.word = word;
+        this.word = wordToLowerCase(word);
+    }
+
+    private String wordToLowerCase(String word) {
+        return word.toLowerCase();
     }
 
     private void validate(String word) {
