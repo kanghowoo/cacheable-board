@@ -3,8 +3,10 @@ package com.mide.gangsaeng.bannedword;
 import java.util.Objects;
 
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class BannedWord {
     private final String word;
 
