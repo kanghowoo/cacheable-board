@@ -46,7 +46,7 @@ public class BannedWordController {
         boolean deleted = bannedWordService.delete(word);
 
         if (!deleted) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         return new ResponseEntity<>(HttpStatus.OK);
