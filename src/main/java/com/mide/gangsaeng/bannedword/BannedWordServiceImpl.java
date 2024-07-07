@@ -20,7 +20,7 @@ public class BannedWordServiceImpl implements BannedWordService {
     public boolean add(String word) {
         BannedWord previousValue = cache.putIfAbsent(word, new BannedWord(word));
 
-        return isSuccessAdded(previousValue);
+        return previousValue == null;
     }
 
     @Override
@@ -59,10 +59,6 @@ public class BannedWordServiceImpl implements BannedWordService {
 
     private static boolean isBanned(String word) {
         return cache.containsKey(word);
-    }
-
-    private boolean isSuccessAdded(BannedWord addedWord) {
-        return addedWord == null;
     }
 
 }
