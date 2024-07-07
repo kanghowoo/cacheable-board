@@ -1,5 +1,7 @@
 package com.mide.gangsaeng.common.redis;
 
+import java.time.Duration;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,18 +17,10 @@ public class LettuceConfig {
     private StatefulRedisConnection<String, String> connection;
 
     @Bean
-    public RedisClient redisClient() {
-        return RedisClient.create(getRedisURI());
-    }
-
-    @Bean
-    public StatefulRedisConnection<String, String> connection(RedisClient redisClient) {
-        return redisClient.connect();
-    }
-
-    @Bean
-    public RedisCommands<String, String> syncCommands(StatefulRedisConnection<String, String> connection) {
-        return connection.sync();
+    public RedisCommands<String, String> syncCommands() {
+        this.redisClient = RedisClient.create(getRedisURI());
+        this.connection = redisClient.connect();
+        return this.connection.sync();
     }
 
     @PreDestroy
@@ -41,6 +35,6 @@ public class LettuceConfig {
     }
 
     private RedisURI getRedisURI() {
-        return RedisURI.create("localhost", 6379);
+        return new RedisURI("localhost", 6379, Duration.ofSeconds(60));
     }
 }
