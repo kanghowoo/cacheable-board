@@ -5,21 +5,27 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.mide.gangsaeng.common.Cursor;
-import com.mide.gangsaeng.common.CursorBasedRequest;
-import com.mide.gangsaeng.common.CursorBasedResponse;
+import com.mide.gangsaeng.bannedword.BannedWordService;
+import com.mide.gangsaeng.common.cursor.Cursor;
+import com.mide.gangsaeng.common.cursor.CursorBasedRequest;
+import com.mide.gangsaeng.common.cursor.CursorBasedResponse;
 
 @Service
 public class BoardServiceImpl implements BoardService {
 
     public static final int MAX_VALUE_OF_PAGE_SIZE = 30;
     private final BoardRepository boardRepository;
+    private final BannedWordService bannedWordService;
 
     @Autowired
-    public BoardServiceImpl(BoardRepository boardRepository) {this.boardRepository =
-            boardRepository;}
+    public BoardServiceImpl(BoardRepository boardRepository, BannedWordService bannedWordService) {
+        this.boardRepository = boardRepository;
+        this.bannedWordService = bannedWordService;
+    }
 
+    @Override
     public void write(BoardRequest request) {
+        bannedWordService.validateBannedWords(request.getTitle() + " " +request.getContent());
         boardRepository.write(request);
     }
 

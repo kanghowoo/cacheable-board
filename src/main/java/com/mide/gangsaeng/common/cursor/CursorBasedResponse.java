@@ -1,10 +1,8 @@
-package com.mide.gangsaeng.common;
+package com.mide.gangsaeng.common.cursor;
 
 import java.util.List;
 
-import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public class CursorBasedResponse<T> {
