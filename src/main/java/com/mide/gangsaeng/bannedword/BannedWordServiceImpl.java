@@ -18,9 +18,9 @@ public class BannedWordServiceImpl implements BannedWordService {
 
     @Override
     public boolean add(String word) {
-        BannedWord addedWord = cache.putIfAbsent(word, new BannedWord(word));
+        BannedWord previousValue = cache.putIfAbsent(word, new BannedWord(word));
 
-        return isSuccessAdded(addedWord);
+        return isSuccessAdded(previousValue);
     }
 
     @Override
