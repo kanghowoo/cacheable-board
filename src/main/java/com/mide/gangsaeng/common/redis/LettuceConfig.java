@@ -35,6 +35,6 @@ public class LettuceConfig {
     }
 
     private RedisURI getRedisURI() {
-        return new RedisURI("localhost", 6379, Duration.ofSeconds(60));
+        return new RedisURI("localhost", 6379, Duration.ofSeconds(20));
     }
 }
