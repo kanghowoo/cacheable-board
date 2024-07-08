@@ -8,14 +8,12 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mide.gangsaeng.bannedword.BannedWordService;
 import com.mide.gangsaeng.common.cursor.Cursor;
 import com.mide.gangsaeng.common.cursor.CursorBasedRequest;
 import com.mide.gangsaeng.common.cursor.CursorBasedResponse;
 
-import io.lettuce.core.RedisConnectionException;
 import io.lettuce.core.RedisException;
 import io.lettuce.core.SetArgs;
 import io.lettuce.core.api.sync.RedisCommands;
