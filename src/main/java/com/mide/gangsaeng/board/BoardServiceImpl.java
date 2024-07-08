@@ -15,6 +15,8 @@ import com.mide.gangsaeng.common.cursor.Cursor;
 import com.mide.gangsaeng.common.cursor.CursorBasedRequest;
 import com.mide.gangsaeng.common.cursor.CursorBasedResponse;
 
+import io.lettuce.core.RedisConnectionException;
+import io.lettuce.core.RedisException;
 import io.lettuce.core.SetArgs;
 import io.lettuce.core.api.sync.RedisCommands;
 import lombok.extern.slf4j.Slf4j;
@@ -127,14 +129,21 @@ public class BoardServiceImpl implements BoardService {
             String boardValue = objectMapper.writeValueAsString(board);
             final long boardId = board.getId();
             redisCommands.set(makeBoardKey(boardId), boardValue, boardCachedDuration());
-        } catch (JsonProcessingException e) {
+        } catch (JsonProcessingException | RedisException e) {
             log.error(e.getMessage(), e);
         }
     }
 
     private Board fetchCachedBoard(long id) {
         String boardRedisKey = makeBoardKey(id);
-        String boardValue = redisCommands.get(boardRedisKey);
+        String boardValue;
+
+        try {
+            boardValue = redisCommands.get(boardRedisKey);
+        } catch (RedisException e) {
+            log.error(e.getMessage(), e);
+            return null;
+        }
 
         if (boardValue == null) {
             return null;

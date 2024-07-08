@@ -5,6 +5,7 @@ import java.time.Duration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import io.lettuce.core.ClientOptions;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.RedisURI;
 import io.lettuce.core.api.StatefulRedisConnection;
@@ -19,6 +20,9 @@ public class LettuceConfig {
     @Bean
     public RedisCommands<String, String> syncCommands() {
         this.redisClient = RedisClient.create(getRedisURI());
+        redisClient.setOptions(ClientOptions.builder()
+                                       .autoReconnect(false)
+                                       .build());
         this.connection = redisClient.connect();
         return this.connection.sync();
     }
