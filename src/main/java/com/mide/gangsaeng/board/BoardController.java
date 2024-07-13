@@ -3,6 +3,7 @@ package com.mide.gangsaeng.board;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,9 +26,14 @@ public class BoardController {
     public static final String DEFAULT_PAGE = "1";
     public static final String DEFAULT_SIZE = "10";
     private final BoardService boardService;
+    private final BoardReadService boardReadService;
 
     @Autowired
-    public BoardController(BoardService boardService) {this.boardService = boardService;}
+    public BoardController(BoardService boardService,
+                           @Qualifier("cacheableBoardReadServiceImpl") BoardReadService boardReadService) {
+        this.boardService = boardService;
+        this.boardReadService = boardReadService;
+    }
 
     @PostMapping
     public ResponseEntity<?> write(@Valid @RequestBody BoardRequest request) {
@@ -37,7 +43,7 @@ public class BoardController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> read(@PathVariable Long id) {
-        BoardResponse boardResponse = boardService.read(id);
+        BoardResponse boardResponse = boardReadService.read(id);
         return new ResponseEntity<>(boardResponse, HttpStatus.OK);
     }
 
