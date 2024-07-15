@@ -1,22 +1,16 @@
 package com.mide.gangsaeng.board;
 
-import java.time.Duration;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mide.gangsaeng.bannedword.BannedWordService;
 import com.mide.gangsaeng.common.cursor.Cursor;
 import com.mide.gangsaeng.common.cursor.CursorBasedRequest;
 import com.mide.gangsaeng.common.cursor.CursorBasedResponse;
 
-import io.lettuce.core.RedisException;
-import io.lettuce.core.SetArgs;
-import io.lettuce.core.api.sync.RedisCommands;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -26,18 +20,15 @@ public class BoardServiceImpl implements BoardService {
     public static final int MAX_VALUE_OF_PAGE_SIZE = 30;
     private final BoardRepository boardRepository;
     private final BannedWordService bannedWordService;
-    private final RedisCommands<String, String> redisCommands;
-    private final ObjectMapper objectMapper;
+    private final BoardReadStorage boardReadStorage;
 
     @Autowired
     public BoardServiceImpl(BoardRepository boardRepository,
                             BannedWordService bannedWordService,
-                            RedisCommands<String, String> redisCommands,
-                            ObjectMapper objectMapper) {
+                            @Qualifier("cacheableBoardReadStorage") BoardReadStorage boardReadStorage) {
         this.boardRepository = boardRepository;
         this.bannedWordService = bannedWordService;
-        this.redisCommands = redisCommands;
-        this.objectMapper = objectMapper;
+        this.boardReadStorage = boardReadStorage;
     }
 
     @Override
@@ -48,12 +39,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public BoardResponse read(long id) {
-        Board board = fetchCachedBoard(id);
-
-        if (board == null) {
-            board = boardRepository.read(id);
-            cacheBoard(board);
-        }
+        Board board = boardReadStorage.read(id);
 
         return BoardResponse.builder()
                 .id(board.getId())
@@ -119,49 +105,6 @@ public class BoardServiceImpl implements BoardService {
         }
 
         return new CursorBasedResponse<>(page, new Cursor(prevCursor, nextCursor));
-    }
-
-    public void cacheBoard(Board board) {
-
-        try {
-            String boardValue = objectMapper.writeValueAsString(board);
-            final long boardId = board.getId();
-            redisCommands.set(makeBoardKey(boardId), boardValue, boardCachedDuration());
-        } catch (JsonProcessingException | RedisException e) {
-            log.error(e.getMessage(), e);
-        }
-    }
-
-    private Board fetchCachedBoard(long id) {
-        String boardRedisKey = makeBoardKey(id);
-        String boardValue;
-
-        try {
-            boardValue = redisCommands.get(boardRedisKey);
-        } catch (RedisException e) {
-            log.error(e.getMessage(), e);
-            return null;
-        }
-
-        if (boardValue == null) {
-            return null;
-        }
-
-        try {
-            return objectMapper.readValue(boardValue, new TypeReference<>() {});
-        } catch (JsonProcessingException e) {
-            log.error(e.getMessage(), e);
-        }
-
-        return null;
-    }
-
-    private SetArgs boardCachedDuration() {
-        return SetArgs.Builder.ex(Duration.ofMillis(10_000));
-    }
-
-    private String makeBoardKey(long id) {
-        return "board:" + id;
     }
 
     private boolean isRootCursor(CursorBasedRequest request) {
