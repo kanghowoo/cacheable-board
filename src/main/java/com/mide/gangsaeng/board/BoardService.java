@@ -7,7 +7,7 @@ import com.mide.gangsaeng.common.cursor.CursorBasedResponse;
 
 public interface BoardService {
     void write(BoardRequest request);
-//    BoardResponse read(long id);
+    BoardResponse read(long id);
     List<Board> getPage(int offset, int size);
     CursorBasedResponse<Board> getPageByCursor(CursorBasedRequest request, int size);
 }
