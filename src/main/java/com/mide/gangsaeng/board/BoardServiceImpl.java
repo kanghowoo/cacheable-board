@@ -20,15 +20,12 @@ public class BoardServiceImpl implements BoardService {
     public static final int MAX_VALUE_OF_PAGE_SIZE = 30;
     private final BoardRepository boardRepository;
     private final BannedWordService bannedWordService;
-    private final BoardReadStorage boardReadStorage;
 
     @Autowired
-    public BoardServiceImpl(BoardRepository boardRepository,
-                            BannedWordService bannedWordService,
-                            @Qualifier("cacheableBoardReadStorage") BoardReadStorage boardReadStorage) {
+    public BoardServiceImpl(@Qualifier("cacheableBoardRepository") BoardRepository boardRepository,
+                            BannedWordService bannedWordService) {
         this.boardRepository = boardRepository;
         this.bannedWordService = bannedWordService;
-        this.boardReadStorage = boardReadStorage;
     }
 
     @Override
@@ -39,7 +36,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public BoardResponse read(long id) {
-        Board board = boardReadStorage.read(id);
+        Board board = boardRepository.read(id);
 
         return BoardResponse.builder()
                 .id(board.getId())
