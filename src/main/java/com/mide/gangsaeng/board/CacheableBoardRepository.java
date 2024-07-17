@@ -25,6 +25,7 @@ public class CacheableBoardRepository implements BoardRepository {
     @Override
     public void write(Board board) {
         db.write(board);
+        cache.write(board);
     }
 
     @Override
