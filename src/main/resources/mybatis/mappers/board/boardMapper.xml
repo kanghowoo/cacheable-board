@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.mide.gangsaeng.board.BoardMapper">
-  <insert id="write" parameterType="com.mide.gangsaeng.board.BoardRequest">
+<mapper namespace="com.mide.gangsaeng.board.BoardMybatisMapper">
+  <insert id="write" parameterType="com.mide.gangsaeng.board.Board">
     INSERT INTO boards (title, content, user_id) values (#{title}, #{content}, #{userId});
   </insert>
 

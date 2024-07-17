@@ -1,6 +1,7 @@
 package com.mide.gangsaeng.board;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -10,6 +11,7 @@ import com.mide.gangsaeng.bannedword.BannedWordService;
 import com.mide.gangsaeng.common.cursor.Cursor;
 import com.mide.gangsaeng.common.cursor.CursorBasedRequest;
 import com.mide.gangsaeng.common.cursor.CursorBasedResponse;
+import com.mide.gangsaeng.common.error.ErrorCode;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,23 +22,30 @@ public class BoardServiceImpl implements BoardService {
     public static final int MAX_VALUE_OF_PAGE_SIZE = 30;
     private final BoardRepository boardRepository;
     private final BannedWordService bannedWordService;
+    private final BoardMapper boardMapper;
 
     @Autowired
     public BoardServiceImpl(@Qualifier("cacheableBoardRepository") BoardRepository boardRepository,
-                            BannedWordService bannedWordService) {
+                            BannedWordService bannedWordService,
+                            BoardMapper boardMapper) {
         this.boardRepository = boardRepository;
         this.bannedWordService = bannedWordService;
+        this.boardMapper = boardMapper;
     }
 
     @Override
     public void write(BoardRequest request) {
         bannedWordService.validateBannedWords(request.getTitle() + " " +request.getContent());
-        boardRepository.write(request);
+
+        Board board = boardMapper.boardRequestToBoard(request);
+        boardRepository.write(board);
     }
 
     @Override
     public BoardResponse read(long id) {
         Board board = boardRepository.read(id);
+        Optional.ofNullable(board)
+                .orElseThrow(() -> new BoardNotFoundException(ErrorCode.BOARD_NOT_FOUND));
 
         return BoardResponse.builder()
                 .id(board.getId())

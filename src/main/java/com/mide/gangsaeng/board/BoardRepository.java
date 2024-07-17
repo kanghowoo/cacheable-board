@@ -3,7 +3,7 @@ package com.mide.gangsaeng.board;
 import java.util.List;
 
 public interface BoardRepository {
-    void write(BoardRequest request);
+    void write(Board board);
     Board read(long id);
     List<Board> getPage(int offset, int size);
 

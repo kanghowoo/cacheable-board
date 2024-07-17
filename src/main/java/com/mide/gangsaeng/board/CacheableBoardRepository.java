@@ -1,13 +1,10 @@
 package com.mide.gangsaeng.board;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
-
-import com.mide.gangsaeng.common.error.ErrorCode;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,8 +23,8 @@ public class CacheableBoardRepository implements BoardRepository {
     }
 
     @Override
-    public void write(BoardRequest request) {
-        db.write(request);
+    public void write(Board board) {
+        db.write(board);
     }
 
     @Override
@@ -36,10 +33,11 @@ public class CacheableBoardRepository implements BoardRepository {
 
         if (board == null) {
             board = db.read(id);
-            Optional.ofNullable(board)
-                            .orElseThrow(() -> new BoardNotFoundException(ErrorCode.BOARD_NOT_FOUND));
 
-            cache.cacheBoard(board);
+            if (board == null) {
+                return board;
+            }
+            cache.write(board);
         }
 
         return board;
