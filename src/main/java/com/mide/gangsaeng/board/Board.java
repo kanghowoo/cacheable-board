@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@Builder
+@Builder(toBuilder = true)
 public class Board {
     private final long id;
     private final String title;
