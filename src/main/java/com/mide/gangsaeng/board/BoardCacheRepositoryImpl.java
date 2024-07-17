@@ -28,8 +28,15 @@ public class BoardCacheRepositoryImpl implements BoardRepository {
     }
 
     @Override
-    public void write(BoardRequest request) {
-        throw new UnsupportedOperationException("Unsupported operation");
+    public void write(Board board) {
+
+        try {
+            String boardValue = objectMapper.writeValueAsString(board);
+            final long boardId = board.getId();
+            redisCommands.set(makeBoardKey(boardId), boardValue, boardCachedDuration());
+        } catch (JsonProcessingException | RedisException e) {
+            log.error(e.getMessage(), e);
+        }
     }
 
     @Override
@@ -70,17 +77,6 @@ public class BoardCacheRepositoryImpl implements BoardRepository {
     @Override
     public List<Board> getNextPage(long cursor, int size) {
         throw new UnsupportedOperationException("Unsupported operation");
-    }
-
-    public void cacheBoard(Board board) {
-
-        try {
-            String boardValue = objectMapper.writeValueAsString(board);
-            final long boardId = board.getId();
-            redisCommands.set(makeBoardKey(boardId), boardValue, boardCachedDuration());
-        } catch (JsonProcessingException | RedisException e) {
-            log.error(e.getMessage(), e);
-        }
     }
 
     private SetArgs boardCachedDuration() {
