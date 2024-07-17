@@ -27,19 +27,11 @@ public class CacheableBoardRepository implements BoardRepository {
     @Override
     public void write(Board board) {
         Board boardDataToBeStored = board.toBuilder()
-                                          .createdAt(LocalDateTime
-                                                             .now(ZoneId.of("Asia/Seoul"))
-                                                             .withNano(0))
-                                          .updatedAt(LocalDateTime
-                                                             .now(ZoneId.of("Asia/Seoul"))
-                                                             .withNano(0))
+                                          .createdAt(LocalDateTime.now().withNano(0))
+                                          .updatedAt(LocalDateTime.now().withNano(0))
                                           .build();
         db.write(boardDataToBeStored);
-
-        Board boardDataToBeCached = boardDataToBeStored.toBuilder()
-                                                       .id(boardDataToBeStored.getId())
-                                                       .build();
-        cache.write(boardDataToBeCached);
+        cache.write(boardDataToBeStored);
     }
 
     @Override
