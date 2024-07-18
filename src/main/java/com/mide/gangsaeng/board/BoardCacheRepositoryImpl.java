@@ -40,6 +40,19 @@ public class BoardCacheRepositoryImpl implements BoardRepository {
     }
 
     @Override
+    public void update(Board board) {
+
+        try {
+            final long boardId = board.getId();
+            redisCommands.del(makeBoardKey(boardId));
+        } catch (RedisException e) {
+            log.error(e.getMessage(), e);
+        }
+
+        this.write(board);
+    }
+
+    @Override
     public Board read(long id) {
         String boardRedisKey = makeBoardKey(id);
         String boardValue;

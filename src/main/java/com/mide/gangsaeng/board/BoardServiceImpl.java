@@ -42,6 +42,24 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    public void update(long id, BoardRequest request) {
+        Board board = boardRepository.read(id);
+
+        if (board.getUserId() != request.getUserId()) {
+            throw new BoardAuthorizationFailedException(ErrorCode.BOARD_WRITER_INCORRECT);
+        }
+
+        bannedWordService.validateBannedWords(request.getTitle() + " " + request.getContent());
+
+        Board boardDataToBeUpdated = board.toBuilder()
+                                         .title(request.getTitle())
+                                         .content(request.getContent())
+                                         .build();
+
+        boardRepository.update(boardDataToBeUpdated);
+    }
+
+    @Override
     public BoardResponse read(long id) {
         Board board = boardRepository.read(id);
         Optional.ofNullable(board)

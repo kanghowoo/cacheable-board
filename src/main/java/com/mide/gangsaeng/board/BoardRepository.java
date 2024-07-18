@@ -4,6 +4,7 @@ import java.util.List;
 
 public interface BoardRepository {
     void write(Board board);
+    void update(Board board);
     Board read(long id);
     List<Board> getPage(int offset, int size);
 
