@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.mide.gangsaeng.board.BoardMapper">
-  <insert id="write" parameterType="com.mide.gangsaeng.board.BoardRequest">
-    INSERT INTO boards (title, content, user_id) values (#{title}, #{content}, #{userId});
+<mapper namespace="com.mide.gangsaeng.board.BoardMybatisMapper">
+  <insert id="write" parameterType="com.mide.gangsaeng.board.Board" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO boards (title, content, user_id, created_at, updated_at)
+    values (#{title}, #{content}, #{userId}, #{createdAt}, #{updatedAt});
   </insert>
 
   <select id="read" parameterType="Long" resultType="com.mide.gangsaeng.board.Board">
