@@ -1,7 +1,6 @@
 package com.mide.gangsaeng.board;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +31,15 @@ public class CacheableBoardRepository implements BoardRepository {
                                           .build();
         db.write(boardDataToBeStored);
         cache.write(boardDataToBeStored);
+    }
+
+    @Override
+    public void update(Board board) {
+        Board boardDataToBoStored = board.toBuilder()
+                                         .updatedAt(LocalDateTime.now())
+                                         .build();
+        db.update(boardDataToBoStored);
+        cache.update(boardDataToBoStored);
     }
 
     @Override

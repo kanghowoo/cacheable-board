@@ -7,6 +7,12 @@
     values (#{title}, #{content}, #{userId}, #{createdAt}, #{updatedAt});
   </insert>
 
+  <update id="update" parameterType="com.mide.gangsaeng.board.Board">
+    UPDATE boards
+    SET title = #{title}, content = #{content}, updated_at = #{updatedAt}
+    WHERE id = #{id}
+  </update>
+
   <select id="read" parameterType="Long" resultType="com.mide.gangsaeng.board.Board">
     SELECT *
     FROM boards
