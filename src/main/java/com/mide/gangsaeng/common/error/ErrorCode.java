@@ -4,13 +4,15 @@ import org.springframework.http.HttpStatus;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 import lombok.Getter;
 
 @Getter
 public enum ErrorCode {
     INCLUDE_BANNED_WORD("BW001", "include banned word", BAD_REQUEST),
-    BOARD_NOT_FOUND("B001", "board not found", NOT_FOUND)
+    BOARD_NOT_FOUND("B001", "board not found", NOT_FOUND),
+    BOARD_WRITER_INCORRECT("B002", "user is incorrect", UNAUTHORIZED),
     ;
 
     private final String code;

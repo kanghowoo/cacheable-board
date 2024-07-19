@@ -40,6 +40,11 @@ public class BoardCacheRepositoryImpl implements BoardRepository {
     }
 
     @Override
+    public void update(Board board) {
+        this.write(board);
+    }
+
+    @Override
     public Board read(long id) {
         String boardRedisKey = makeBoardKey(id);
         String boardValue;

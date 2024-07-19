@@ -17,6 +17,11 @@ public class BoardRdbRepositoryImpl implements BoardRepository {
     }
 
     @Override
+    public void update(Board board) {
+        mapper.update(board);
+    }
+
+    @Override
     public Board read(long id) {
         return mapper.read(id);
     }
