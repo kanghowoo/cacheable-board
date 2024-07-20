@@ -22,6 +22,9 @@
     - `$ sudo systemctl status mysqld`
 - check log
     - `$ tail -100 /var/log/mysql/mysqld.log`
+-create user
+    - `$ create user '[username]'@'%' identified by '[password]';`
+    - `$ select user,host from mysql.user;` (for check)
 ### Install Redis
 - `$ sudo dnf install redis-6.2.7-1.el9`
 - active check 
