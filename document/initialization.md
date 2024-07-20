@@ -18,8 +18,10 @@
 - `$ sudo dnf install mysql-8.0.36-1.el9`
 - `$ sudo dnf install mysql-server-8.0.36-1.el9`
 - `$ sudo systemctl enable mysqld` (for auto restart)
-- active check `$ sudo systemctl status mysqld`
-
+- active check
+    - `$ sudo systemctl status mysqld`
+- check log
+    - `$ tail -100 /var/log/mysql/mysqld.log`
 ### Install Redis
 - `$ sudo dnf install redis-6.2.7-1.el9`
 - active check 
@@ -28,4 +30,5 @@
     - `$ sudo systemctl enable redis` (for auto restart)
     - `$ sudo systemctl start redis`
     - `$ sudo systemctl status redis`
-
+- check log
+    - `$ tail -100 /var/log/redis/redis.log`
