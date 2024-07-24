@@ -35,3 +35,13 @@
     - `$ sudo systemctl status redis`
 - check log
     - `$ tail -100 /var/log/redis/redis.log`
+
+### Setting active profiles
+- `$ vi ~/.bashrc`
+    - `export SPRING_PROFILES_ACTIVE=prod`
+- `$ source ~/.bashrc`
+
+### Setting environment variables for Application
+- `$ vi ~/.bashrc`
+    - `export ENCRYPTOR_PASSWORD=[password]` (jasypt password key)
+- `$ source ~/.bashrc`
