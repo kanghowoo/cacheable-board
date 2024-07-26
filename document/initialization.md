@@ -52,3 +52,8 @@
 - `$ vi ~/.bashrc`
     - `export ENCRYPTOR_PASSWORD=[password]` (jasypt password key)
 - `$ source ~/.bashrc`
+
+### Install git
+- `$ sudo dnf install git-2.43.5-1.el9`
+- check
+    - `$ git --version`
