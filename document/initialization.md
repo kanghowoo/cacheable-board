@@ -1,10 +1,11 @@
 ### Create AWS ec2 Instance
-- type: t3.micro
-- zone: ap-southeast-2b
+- platform: Cent OS
+- type: t2.micro
+- zone: ap-northeast-2a
 - name: board-service-001-prod
 
 ### Setup Timezone
-- `$ timedatectl set-timezone Asia/Seoul`
+- `$ sudo timedatectl set-timezone Asia/Seoul`
 
 ### Install java
 - `$ sudo dnf install java-17-openjdk-devel.x86_64`
@@ -19,12 +20,23 @@
 - `$ sudo dnf install mysql-server-8.0.36-1.el9`
 - `$ sudo systemctl enable mysqld` (for auto restart)
 - active check
+    - `$ sudo systemctl start mysqld` 
     - `$ sudo systemctl status mysqld`
 - check log
     - `$ tail -100 /var/log/mysql/mysqld.log`
--create user
+- set root password
+    - $ `mysql -u root` (Connect to MySQL)
+    - ```
+      USE mysql;
+      ALTER USER 'root'@'localhost' IDENTIFIED BY '[new_password]';
+      FLUSH PRIVILEGES;
+      EXIT;
+      ```
+      (Set the root password)
+- create user
     - `$ create user '[username]'@'%' identified by '[password]';`
     - `$ select user,host from mysql.user;` (for check)
+
 ### Install Redis
 - `$ sudo dnf install redis-6.2.7-1.el9`
 - active check 
