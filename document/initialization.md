@@ -7,13 +7,23 @@
 ### Setup Timezone
 - `$ sudo timedatectl set-timezone Asia/Seoul`
 
-### Install java
+### Install java , maven
 - `$ sudo dnf install java-17-openjdk-devel.x86_64`
 - `$ sudo dnf install wget`
 - `$ wget https://dlcdn.apache.org/maven/maven-3/3.8.8/binaries/apache-maven-3.8.8-bin.tar.gz`
 - `$ tar -xvf apache-maven-3.8.8-bin.tar.gz`
 
-- install check `$ java -version`
+- `$ vi ~/.bash_profile`
+- ```
+  #JAVA
+  export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-17.0.6.0.10-3.el9.x86_64
+  #MAVEN
+  export MAVEN_HOME=/home/ec2-user/apache-maven-3.8.8
+  
+  export PATH=$JAVA_HOME/bin:$MAVEN_HOME/bin:$PATH`
+- install check 
+    - `$ java -version`
+    - `$ mvn --version`
 
 ### Install MySQL
 - `$ sudo dnf install mysql-8.0.36-1.el9`
@@ -57,3 +67,11 @@
 - `$ sudo dnf install git-2.43.5-1.el9`
 - check
     - `$ git --version`
+
+### Install lsof
+- `$ sudo dnf install lsof-4.94.0-3.el9`
+- install check
+    - `$ lsof -v`
+
+### Check the listening ports on Linux
+- `$ sudo lsof -i -P -n | grep LISTEN
