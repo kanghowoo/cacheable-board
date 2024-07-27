@@ -47,6 +47,12 @@
     - `$ create user '[username]'@'%' identified by '[password]';`
     - `$ select user,host from mysql.user;` (for check)
 
+- grant privileges
+    - ```
+      GRANT ALL PRIVILEGES ON [database_name].* TO '[username]'@'localhost';`
+      FLUSH PRIVILEGES;
+      SHOW GRANTS FOR '[username]'@'localhost';
+      ```
 ### Install Redis
 - `$ sudo dnf install redis-6.2.7-1.el9`
 - active check 
