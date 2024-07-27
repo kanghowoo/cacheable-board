@@ -3,9 +3,10 @@
 BRANCH=$1
 
 REPOSITORY=/home/ec2-user/app
-PROJECT_NAME=maven_practice
+GIT_PROJECT_NAME=maven_practice
+PROJECT_NAME=gangsaeng
 
-cd $REPOSITORY/$PROJECT_NAME/
+cd $REPOSITORY/$GIT_PROJECT_NAME/
 
 # step1 - fetch the branch and download the source file
 git fetch origin $BRANCH
@@ -35,7 +36,7 @@ else
 fi
 
 # step6 - start application with jvm options
-JAR_NAME=$(ls -rt $REPOSITORY/target | grep jar | tail -n 1)
+JAR_NAME=$(ls -rt $REPOSITORY/$GIT_PROJECT_NAME/target | grep jar | tail -n 1)
 echo "> JAR Name : $JAR_NAME"
 
-nohup java -jar $REPOSITORY/target/$JAR_NAME --spring.profiles.active=prod 2>&1 &
+nohup java -jar $REPOSITORY/$GIT_PROJECT_NAME/target/$JAR_NAME --spring.profiles.active=prod 2>&1 &
