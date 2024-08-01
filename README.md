@@ -26,3 +26,6 @@
   ```
 - You can check this all following docs.
     - [jasypt-spring-boot docs](https://github.com/ulisesbocchio/jasypt-spring-boot)
+
+### How to Initialize Application
+- [link](https://github.com/kanghowoo/maven_practice/blob/main/document/initialization.md)
