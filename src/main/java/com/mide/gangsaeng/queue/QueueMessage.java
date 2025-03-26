@@ -1,2 +1,4 @@
-package com.mide.gangsaeng.queue;public class QueueMessage {
+package com.mide.gangsaeng.queue;
+
+public interface QueueMessage {
 }
