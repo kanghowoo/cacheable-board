@@ -12,8 +12,6 @@ import com.mide.gangsaeng.common.cursor.Cursor;
 import com.mide.gangsaeng.common.cursor.CursorBasedRequest;
 import com.mide.gangsaeng.common.cursor.CursorBasedResponse;
 import com.mide.gangsaeng.common.error.ErrorCode;
-import com.mide.gangsaeng.queue.MessageQueueService;
-import com.mide.gangsaeng.queue.message.BoardCreateFailedMessage;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,17 +23,14 @@ public class BoardServiceImpl implements BoardService {
     private final BoardRepository boardRepository;
     private final BannedWordService bannedWordService;
     private final BoardMapper boardMapper;
-    private final MessageQueueService messageQueueService;
 
     @Autowired
     public BoardServiceImpl(@Qualifier("cacheableBoardRepository") BoardRepository boardRepository,
                             BannedWordService bannedWordService,
-                            BoardMapper boardMapper,
-                            MessageQueueService messageQueueService) {
+                            BoardMapper boardMapper) {
         this.boardRepository = boardRepository;
         this.bannedWordService = bannedWordService;
         this.boardMapper = boardMapper;
-        this.messageQueueService = messageQueueService;
     }
 
     @Override
@@ -43,13 +38,7 @@ public class BoardServiceImpl implements BoardService {
         bannedWordService.validateBannedWords(request.getTitle() + " " +request.getContent());
 
         Board board = boardMapper.boardRequestToBoard(request);
-
-        try {
-            boardRepository.write(board);
-        } catch (Exception e) {
-            messageQueueService.send(
-                    new BoardCreateFailedMessage(board.getTitle(), board.getContent()));
-        }
+        boardRepository.write(board);
     }
 
     @Override

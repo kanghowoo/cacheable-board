@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
+import com.mide.gangsaeng.queue.MessageQueueService;
+import com.mide.gangsaeng.queue.message.BoardCreateFailedMessage;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -14,13 +17,16 @@ import lombok.extern.slf4j.Slf4j;
 public class CacheableBoardRepository implements BoardRepository {
     private final BoardRepository db;
     private final BoardCacheRepositoryImpl cache;
+    private final MessageQueueService messageQueueService;
 
     @Autowired
     public CacheableBoardRepository(
             @Qualifier("boardRdbRepositoryImpl") BoardRepository db,
-            BoardCacheRepositoryImpl cache) {
+            BoardCacheRepositoryImpl cache,
+            MessageQueueService messageQueueService) {
         this.db = db;
         this.cache = cache;
+        this.messageQueueService = messageQueueService;
     }
 
     @Override
@@ -29,7 +35,12 @@ public class CacheableBoardRepository implements BoardRepository {
                                           .createdAt(LocalDateTime.now())
                                           .updatedAt(LocalDateTime.now())
                                           .build();
-        db.write(boardDataToBeStored);
+        try {
+            db.write(boardDataToBeStored);
+        } catch (Exception e) {
+            messageQueueService.send(new BoardCreateFailedMessage(board.getTitle(), board.getContent()));
+        }
+
         cache.write(boardDataToBeStored);
     }
 
