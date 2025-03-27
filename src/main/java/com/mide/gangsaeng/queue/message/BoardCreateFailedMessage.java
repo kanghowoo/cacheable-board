@@ -16,13 +16,13 @@ import lombok.Getter;
 public class BoardCreateFailedMessage implements QueueMessage {
     private final String title;
     private final String content;
+    private final long userId;
     private final LocalDateTime createdAt;
-    private final LocalDateTime updatedAt;
 
     public BoardCreateFailedMessage(Board board) {
         this.title = board.getTitle();
         this.content = board.getContent();
+        this.userId = board.getUserId();
         this.createdAt = board.getCreatedAt();
-        this.updatedAt = board.getUpdatedAt();
     }
 }
