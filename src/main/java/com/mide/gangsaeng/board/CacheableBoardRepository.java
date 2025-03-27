@@ -12,14 +12,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Repository
 public class CacheableBoardRepository implements BoardRepository {
-    private final BoardRepository retryableDb;
+    private final BoardRepository db;
     private final BoardCacheRepositoryImpl cache;
 
     @Autowired
     public CacheableBoardRepository(
-            @Qualifier("retryableBoardRepository") BoardRepository retryableDb,
+            @Qualifier("retryableBoardRepository") BoardRepository db,
             BoardCacheRepositoryImpl cache) {
-        this.retryableDb = retryableDb;
+        this.db = db;
         this.cache = cache;
     }
 
@@ -29,7 +29,7 @@ public class CacheableBoardRepository implements BoardRepository {
                                           .createdAt(LocalDateTime.now())
                                           .updatedAt(LocalDateTime.now())
                                           .build();
-        retryableDb.write(boardDataToBeStored);
+        db.write(boardDataToBeStored);
         cache.write(boardDataToBeStored);
     }
 
@@ -38,7 +38,7 @@ public class CacheableBoardRepository implements BoardRepository {
         Board boardDataToBoStored = board.toBuilder()
                                          .updatedAt(LocalDateTime.now())
                                          .build();
-        retryableDb.update(boardDataToBoStored);
+        db.update(boardDataToBoStored);
         cache.update(boardDataToBoStored);
     }
 
@@ -47,7 +47,7 @@ public class CacheableBoardRepository implements BoardRepository {
         Board board = cache.read(id);
 
         if (board == null) {
-            board = retryableDb.read(id);
+            board = db.read(id);
 
             if (board == null) {
                 return board;
@@ -60,16 +60,16 @@ public class CacheableBoardRepository implements BoardRepository {
 
     @Override
     public List<Board> getPage(int offset, int size) {
-        return retryableDb.getPage(offset, size);
+        return db.getPage(offset, size);
     }
 
     @Override
     public List<Board> getPrevPage(long cursor, int size) {
-        return retryableDb.getPrevPage(cursor, size);
+        return db.getPrevPage(cursor, size);
     }
 
     @Override
     public List<Board> getNextPage(long cursor, int size) {
-        return retryableDb.getNextPage(cursor, size);
+        return db.getNextPage(cursor, size);
     }
 }
