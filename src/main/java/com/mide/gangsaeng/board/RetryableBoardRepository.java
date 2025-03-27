@@ -1,6 +1,5 @@
 package com.mide.gangsaeng.board;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,35 +10,35 @@ import com.mide.gangsaeng.queue.MessageQueueService;
 import com.mide.gangsaeng.queue.message.BoardCreateFailedMessage;
 
 @Repository
-public class BoardStore implements BoardRepository{
+public class RetryableBoardRepository implements BoardRepository{
     private final BoardRepository db;
     private final MessageQueueService messageQueueService;
 
     @Autowired
-    public BoardStore(@Qualifier("boardRdbRepositoryImpl") BoardRepository db,
-                      MessageQueueService messageQueueService) {
+    public RetryableBoardRepository(@Qualifier("boardRdbRepositoryImpl") BoardRepository db,
+                                    MessageQueueService messageQueueService) {
         this.db = db;
         this.messageQueueService = messageQueueService;
     }
 
     @Override
     public void write(Board board) {
-        Board boardDataToBeStored = board.toBuilder()
-                                         .createdAt(LocalDateTime.now())
-                                         .updatedAt(LocalDateTime.now())
-                                         .build();
-
         try {
-            db.write(boardDataToBeStored);
+            db.write(board);
         } catch (Exception e) {
             messageQueueService.send(
-                    new BoardCreateFailedMessage(board.getTitle(), board.getContent()));
+                    new BoardCreateFailedMessage(board));
         }
     }
 
     @Override
     public void update(Board board) {
-        db.update(board);
+        try {
+            db.update(board);
+        } catch (Exception e) {
+            messageQueueService.send(
+                    new BoardCreateFailedMessage(board));
+        }
     }
 
     @Override

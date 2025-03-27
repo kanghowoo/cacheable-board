@@ -13,16 +13,14 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor(access = AccessLevel.PUBLIC)
-public class BoardCreateFailedMessage implements QueueMessage {
+public class BoardUpdateFailedMessage implements QueueMessage {
     private final String title;
     private final String content;
-    private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
-    public BoardCreateFailedMessage(Board board) {
+    public BoardUpdateFailedMessage(Board board) {
         this.title = board.getTitle();
         this.content = board.getContent();
-        this.createdAt = board.getCreatedAt();
         this.updatedAt = board.getUpdatedAt();
     }
 }
