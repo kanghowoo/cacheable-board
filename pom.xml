@@ -92,9 +92,22 @@
 			<artifactId>jasypt-spring-boot-starter</artifactId>
 			<version>3.0.4</version>
 		</dependency>
+		<dependency>
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java</artifactId>
+			<version>4.29.4</version>
+		</dependency>
 	</dependencies>
 
 	<build>
+		<extensions>
+			<!-- 운영 체제에 따라 protoc 실행파일을 자동으로 감지해주는 확장 -->
+			<extension>
+				<groupId>kr.motd.maven</groupId>
+				<artifactId>os-maven-plugin</artifactId>
+				<version>1.7.0</version>
+			</extension>
+		</extensions>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -112,6 +125,24 @@
 				<groupId>com.github.ulisesbocchio</groupId>
 				<artifactId>jasypt-maven-plugin</artifactId>
 				<version>3.0.4</version>
+			</plugin>
+			<plugin>
+				<groupId>org.xolstice.maven.plugins</groupId>
+				<artifactId>protobuf-maven-plugin</artifactId>
+				<version>0.6.1</version>
+				<configuration>
+					<!-- 사용할 protoc 실행파일을 지정 -->
+					<protocArtifact>
+						com.google.protobuf:protoc:4.29.4:exe:${os.detected.classifier}
+					</protocArtifact>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>compile</goal> <!-- main용 .proto 컴파일 -->
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

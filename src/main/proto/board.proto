@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option java_package = "com.mide.gangsaeng";
+option java_outer_classname = "BoardProto";
+
+message BoardCreateFailedMessage {
+  string title = 1;
+  string content = 2;
+  string userId = 3;
+  string created_at = 4;
+}
+
+message BoardUpdateFailedMessage {
+  string title = 1;
+  string content = 2;
+  string userId = 3;
+  string updated_at = 4;
+}

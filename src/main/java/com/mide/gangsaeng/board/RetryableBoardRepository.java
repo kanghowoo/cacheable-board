@@ -7,18 +7,20 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import com.mide.gangsaeng.queue.MessageQueueService;
-import com.mide.gangsaeng.queue.message.BoardCreateFailedMessage;
 
 @Repository
 public class RetryableBoardRepository implements BoardRepository{
     private final BoardRepository db;
     private final MessageQueueService messageQueueService;
+    private final BoardProtoMapper boardProtoMapper;
 
     @Autowired
     public RetryableBoardRepository(@Qualifier("boardRdbRepositoryImpl") BoardRepository db,
-                                    MessageQueueService messageQueueService) {
+                                    MessageQueueService messageQueueService,
+                                    BoardProtoMapper boardProtoMapper) {
         this.db = db;
         this.messageQueueService = messageQueueService;
+        this.boardProtoMapper = boardProtoMapper;
     }
 
     @Override
@@ -27,7 +29,7 @@ public class RetryableBoardRepository implements BoardRepository{
             db.write(board);
         } catch (Exception e) {
             messageQueueService.send(
-                    new BoardCreateFailedMessage(board));
+                    boardProtoMapper.createFailedToProtobuf(board));
         }
     }
 
@@ -37,7 +39,7 @@ public class RetryableBoardRepository implements BoardRepository{
             db.update(board);
         } catch (Exception e) {
             messageQueueService.send(
-                    new BoardCreateFailedMessage(board));
+                    boardProtoMapper.updateFailedToProtobuf(board));
         }
     }
 

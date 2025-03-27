@@ -2,7 +2,9 @@ package com.mide.gangsaeng.queue;
 
 import org.springframework.stereotype.Service;
 
+import com.google.protobuf.Message;
+
 @Service
 public interface MessageQueueService {
-    void send(QueueMessage message);
+    void send(Message message);
 }
