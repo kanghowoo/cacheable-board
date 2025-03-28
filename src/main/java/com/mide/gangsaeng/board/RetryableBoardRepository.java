@@ -8,6 +8,9 @@ import org.springframework.stereotype.Repository;
 
 import com.mide.gangsaeng.queue.MessageQueueService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Repository
 public class RetryableBoardRepository implements BoardRepository{
     private final BoardRepository db;
@@ -29,7 +32,7 @@ public class RetryableBoardRepository implements BoardRepository{
             db.write(board);
         } catch (Exception e) {
             messageQueueService.send(
-                    boardProtoMapper.createFailedToProtobuf(board));
+                    boardProtoMapper.toCreateFailedMessage(board));
         }
     }
 
@@ -39,7 +42,7 @@ public class RetryableBoardRepository implements BoardRepository{
             db.update(board);
         } catch (Exception e) {
             messageQueueService.send(
-                    boardProtoMapper.updateFailedToProtobuf(board));
+                    boardProtoMapper.toUpdateFailedMessage(board));
         }
     }
 
