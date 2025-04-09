@@ -1,4 +1,0 @@
-package com.mide.gangsaeng.queue;
-
-public interface QueueMessage {
-}
