@@ -6,5 +6,5 @@ import com.google.protobuf.Message;
 
 @Service
 public interface MessageQueueService {
-    void send(Message message);
+    <T> void send(QueueMessage<T> message);
 }

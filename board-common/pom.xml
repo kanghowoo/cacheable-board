@@ -67,6 +67,15 @@
   </dependencies>
 
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <includes>
+          <include>**/*.properties</include>
+        </includes>
+      </resource>
+    </resources>
+
     <extensions>
       <!-- 운영체제에 따라 protoc 실행파일 자동 감지 -->
       <extension>

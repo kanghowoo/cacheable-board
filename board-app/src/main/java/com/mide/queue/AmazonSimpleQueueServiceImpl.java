@@ -10,22 +10,21 @@ import com.google.protobuf.Message;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import software.amazon.awssdk.services.sqs.SqsClient;
+import software.amazon.awssdk.services.sqs.model.DeleteMessageRequest;
 import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class MessageQueueServiceImpl implements MessageQueueService {
+public class AmazonSimpleQueueServiceImpl implements MessageQueueService {
     private final SqsClient sqsClient;
 
     @Value("${aws.sqs.board-queue-url}")
     private String queueUrl;
     @Override
-    public void send(Message message) {
+    public <T> void send(QueueMessage<T> message) {
         try {
-            byte[] serialized = message.toByteArray();
-
-            String encodedMessage = Base64.getEncoder().encodeToString(serialized);
+            String encodedMessage = Base64.getEncoder().encodeToString(message.serialize());
 
             SendMessageRequest request = SendMessageRequest.builder()
                     .queueUrl(queueUrl)

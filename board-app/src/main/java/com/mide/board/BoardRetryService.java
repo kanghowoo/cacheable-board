@@ -6,13 +6,13 @@ import com.mide.gangsaeng.BoardProto.BoardCreateFailedMessage;
 import com.mide.gangsaeng.BoardProto.BoardFailedMessageWrapper;
 import com.mide.gangsaeng.BoardProto.BoardUpdateFailedMessage;
 import com.mide.queue.MessageQueueService;
+import com.mide.queue.ProtobufQueueMessage;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 public class BoardRetryService {
-    public static final int MAX_RETRY_COUNT = 5;
     private final MessageQueueService messageQueueService;
     private final BoardProtoMapper boardProtoMapper;
 
@@ -22,47 +22,23 @@ public class BoardRetryService {
     }
 
     public void sendCreateRetry(Board board) {
-        BoardCreateFailedMessage message = boardProtoMapper.toCreateFailedMessage(board);
-
-        int retryCount = message.getRetryCount();
-
-        if (isRetryLimitExceeded(retryCount)) {
-            log.warn("Exceeded retry limit : {}", retryCount);
-            return;
-        }
-
-        BoardCreateFailedMessage retryMessage =
-                message.toBuilder().setRetryCount(retryCount + 1).build();
+        BoardCreateFailedMessage retryMessage = boardProtoMapper.toCreateFailedMessage(board);
 
         BoardFailedMessageWrapper messageWrapper = BoardFailedMessageWrapper.newBuilder()
                                                                             .setCreate(retryMessage)
                                                                             .build();
 
-        messageQueueService.send(messageWrapper);
+        messageQueueService.send(new ProtobufQueueMessage<>(messageWrapper));
     }
 
     public void sendUpdateRetry(Board board) {
-        BoardUpdateFailedMessage message = boardProtoMapper.toUpdateFailedMessage(board);
-
-        int retryCount = message.getRetryCount();
-
-        if (isRetryLimitExceeded(retryCount)) {
-            log.warn("Exceeded retry limit : {}", retryCount);
-            return;
-        }
-
-        BoardUpdateFailedMessage retryMessage =
-                message.toBuilder().setRetryCount(retryCount + 1).build();
+        BoardUpdateFailedMessage retryMessage = boardProtoMapper.toUpdateFailedMessage(board);
 
         BoardFailedMessageWrapper messageWrapper = BoardFailedMessageWrapper.newBuilder()
                                                                             .setUpdate(retryMessage)
                                                                             .build();
 
-        messageQueueService.send(messageWrapper);
-    }
-
-    private boolean isRetryLimitExceeded(int count) {
-        return count > MAX_RETRY_COUNT;
+        messageQueueService.send(new ProtobufQueueMessage<>(messageWrapper));
     }
 
 }
