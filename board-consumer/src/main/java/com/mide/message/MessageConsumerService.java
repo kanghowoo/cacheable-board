@@ -12,6 +12,7 @@ import com.mide.message.handler.MessageHandler;
 
 import lombok.extern.slf4j.Slf4j;
 import software.amazon.awssdk.services.sqs.SqsClient;
+import software.amazon.awssdk.services.sqs.model.DeleteMessageRequest;
 import software.amazon.awssdk.services.sqs.model.Message;
 import software.amazon.awssdk.services.sqs.model.ReceiveMessageRequest;
 
@@ -56,6 +57,8 @@ public class MessageConsumerService {
                                    .findFirst()
                                    .ifPresent(handler -> handler.handle(wrapper, message));
 
+                    deleteMessage(message);
+
                 } catch (Exception e) {
                     log.error("Message handling failed", e);
                 }
@@ -63,6 +66,13 @@ public class MessageConsumerService {
 
         }
 
+    }
+
+    private void deleteMessage(Message message) {
+        sqsClient.deleteMessage(DeleteMessageRequest.builder()
+                                                    .queueUrl(queueUrl)
+                                                    .receiptHandle(message.receiptHandle())
+                                                    .build());
     }
 
 }

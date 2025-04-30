@@ -22,20 +22,11 @@ public class CreateMessageHandler implements MessageHandler {
 
     private final BoardRepository boardRepository;
     private final BoardProtoMapper boardProtoMapper;
-    private final SqsClient sqsClient;
-    private final MessageQueueService messageQueueService;
-
-    @Value("${aws.sqs.board-queue-url}")
-    private String queueUrl;
 
     public CreateMessageHandler(@Qualifier("boardRdbRepositoryImpl") BoardRepository boardRepository,
-                                BoardProtoMapper boardProtoMapper,
-                                SqsClient sqsClient,
-                                MessageQueueService messageQueueService) {
+                                BoardProtoMapper boardProtoMapper) {
         this.boardRepository = boardRepository;
         this.boardProtoMapper = boardProtoMapper;
-        this.sqsClient = sqsClient;
-        this.messageQueueService = messageQueueService;
     }
 
     @Override
@@ -45,40 +36,13 @@ public class CreateMessageHandler implements MessageHandler {
 
     @Override
     public void handle(BoardFailedMessageWrapper wrapper, Message message) {
-        BoardCreateFailedMessage original = wrapper.getCreate();
 
         try {
             boardRepository.write(boardProtoMapper.toEntity(wrapper.getCreate()));
-            deleteMessage(message);
+
         } catch (Exception e) {
             log.error("create handler failed", e);
-
-            int retryCount = original.getRetryCount() + 1;
-            log.info("RetryCount : {}", retryCount);
-
-            if (retryCount > 5) {
-                log.warn("Retry count exceeded. Dropping message.");
-                deleteMessage(message);
-                return;
-            }
-
-            BoardCreateFailedMessage retried = original.toBuilder()
-                                                       .setRetryCount(retryCount)
-                                                       .build();
-
-            BoardFailedMessageWrapper retryWrapper = BoardFailedMessageWrapper.newBuilder()
-                                                                              .setCreate(retried)
-                                                                              .build();
-
-            messageQueueService.send(new ProtobufQueueMessage(retryWrapper)); // 재전송
-            deleteMessage(message); // 기존 메시지는 삭제
         }
     }
 
-    private void deleteMessage(Message message) {
-        sqsClient.deleteMessage(DeleteMessageRequest.builder()
-                                                    .queueUrl(queueUrl)
-                                                    .receiptHandle(message.receiptHandle())
-                                                    .build());
-    }
 }
