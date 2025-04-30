@@ -4,6 +4,10 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+board-app/src/main/resources/application.properties
+board-app/src/main/resources/application-prod.properties
+board-consumer/src/main/resources/application.properties
+board-common/src/main/resources/application-common.properties
 ### STS ###
 .apt_generated
 .classpath
